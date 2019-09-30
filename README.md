@@ -1,5 +1,5 @@
 # php-log
-基于glog的php日志扩展
+基于phpcpp+glog的php日志扩展
 
 依赖
 

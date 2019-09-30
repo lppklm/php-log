@@ -8,7 +8,7 @@ phpcpp
 2.make && make install
 
 glog
-1.git clone https://github.com/google/glog.git
+1.git clone https://github.com/google/glog.git  
 2../autogen.sh && ./configure && make && make install
 期间可能会遇到各种报错 这时候是缺少某些必要依赖  自行google即可
 我这边安装的有 automake 、 yum install libtool*

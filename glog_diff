@@ -1,0 +1,95 @@
+[1mdiff --git a/src/logging.cc b/src/logging.cc[m
+[1mindex 0c86cf6..9c0b6ac 100644[m
+[1m--- a/src/logging.cc[m
+[1m+++ b/src/logging.cc[m
+[36m@@ -994,22 +994,23 @@[m [mvoid LogFileObject::Write(bool force_flush,[m
+     // The logfile's filename will have the date/time & pid in it[m
+     ostringstream time_pid_stream;[m
+     time_pid_stream.fill('0');[m
+[31m-    time_pid_stream << 1900+tm_time.tm_year[m
+[31m-                    << setw(2) << 1+tm_time.tm_mon[m
+[31m-                    << setw(2) << tm_time.tm_mday[m
+[31m-                    << '-'[m
+[31m-                    << setw(2) << tm_time.tm_hour[m
+[31m-                    << setw(2) << tm_time.tm_min[m
+[31m-                    << setw(2) << tm_time.tm_sec[m
+[32m+[m[32m    //time_pid_stream << 1900+tm_time.tm_year[m
+[32m+[m[32m                    //<< setw(2) << 1+tm_time.tm_mon[m
+[32m+[m[32m                    //<< setw(2) << tm_time.tm_mday[m
+[32m+[m[32m                    //<< '-'[m
+[32m+[m[32m    time_pid_stream << setw(2) << tm_time.tm_hour[m
+[32m+[m[32m                    //<< setw(2) << tm_time.tm_min[m
+[32m+[m[32m                    //<< setw(2) << tm_time.tm_sec[m
+                     << '.'[m
+[31m-                    << GetMainThreadPid();[m
+[32m+[m[32m                    << "log";[m
+[32m+[m[32m                    //<< GetMainThreadPid();[m
+     const string& time_pid_string = time_pid_stream.str();[m
+ [m
+     if (base_filename_selected_) {[m
+       if (!CreateLogfile(time_pid_string)) {[m
+[31m-        perror("Could not create log file");[m
+[31m-        fprintf(stderr, "COULD NOT CREATE LOGFILE '%s'!\n",[m
+[31m-                time_pid_string.c_str());[m
+[32m+[m[32m        // perror("Could not create log file");[m
+[32m+[m[32m        // fprintf(stderr, "COULD NOT CREATE LOGFILE '%s'!\n",[m
+[32m+[m[32m        //         time_pid_string.c_str());[m
+         return;[m
+       }[m
+     } else {[m
+[36m@@ -1056,9 +1057,9 @@[m [mvoid LogFileObject::Write(bool force_flush,[m
+       }[m
+       // If we never succeeded, we have to give up[m
+       if ( success == false ) {[m
+[31m-        perror("Could not create logging file");[m
+[31m-        fprintf(stderr, "COULD NOT CREATE A LOGGINGFILE %s!",[m
+[31m-                time_pid_string.c_str());[m
+[32m+[m[32m        // perror("Could not create logging file");[m
+[32m+[m[32m        // fprintf(stderr, "COULD NOT CREATE A LOGGINGFILE %s!",[m
+[32m+[m[32m        //         time_pid_string.c_str());[m
+         return;[m
+       }[m
+     }[m
+[36m@@ -1066,18 +1067,19 @@[m [mvoid LogFileObject::Write(bool force_flush,[m
+     // Write a header message into the log file[m
+     ostringstream file_header_stream;[m
+     file_header_stream.fill('0');[m
+[31m-    file_header_stream << "Log file created at: "[m
+[31m-                       << 1900+tm_time.tm_year << '/'[m
+[31m-                       << setw(2) << 1+tm_time.tm_mon << '/'[m
+[31m-                       << setw(2) << tm_time.tm_mday[m
+[31m-                       << ' '[m
+[31m-                       << setw(2) << tm_time.tm_hour << ':'[m
+[31m-                       << setw(2) << tm_time.tm_min << ':'[m
+[31m-                       << setw(2) << tm_time.tm_sec << '\n'[m
+[31m-                       << "Running on machine: "[m
+[31m-                       << LogDestination::hostname() << '\n'[m
+[31m-                       << "Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu "[m
+[31m-                       << "threadid file:line] msg" << '\n';[m
+[32m+[m[32m    file_header_stream << "";[m
+[32m+[m[32m    // file_header_stream << "Log file created at: "[m
+[32m+[m[32m    //                    << 1900+tm_time.tm_year << '/'[m
+[32m+[m[32m    //                    << setw(2) << 1+tm_time.tm_mon << '/'[m
+[32m+[m[32m    //                    << setw(2) << tm_time.tm_mday[m
+[32m+[m[32m    //                    << ' '[m
+[32m+[m[32m    //                    << setw(2) << tm_time.tm_hour << ':'[m
+[32m+[m[32m    //                    << setw(2) << tm_time.tm_min << ':'[m
+[32m+[m[32m    //                    << setw(2) << tm_time.tm_sec << '\n'[m
+[32m+[m[32m    //                    << "Running on machine: "[m
+[32m+[m[32m    //                    << LogDestination::hostname() << '\n'[m
+[32m+[m[32m    //                    << "Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu "[m
+[32m+[m[32m    //                    << "threadid file:line] msg" << '\n';[m
+     const string& file_header_string = file_header_stream.str();[m
+ [m
+     const int header_len = file_header_string.size();[m
+[36m@@ -1289,8 +1291,8 @@[m [mvoid LogMessage::Init(const char* file,[m
+              << ' '[m
+              << setfill(' ') << setw(5)[m
+              << static_cast<unsigned int>(GetTID()) << setfill('0')[m
+[31m-             << ' '[m
+[31m-             << data_->basename_ << ':' << data_->line_ << "] ";[m
+[32m+[m[32m             << ' ';[m
+[32m+[m[32m             //<< data_->basename_ << ':' << data_->line_ << "] ";[m
+   }[m
+   data_->num_prefix_chars_ = data_->stream_.pcount();[m
+ [m

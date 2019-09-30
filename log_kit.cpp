@@ -45,7 +45,7 @@ void log_kit::init(__PHP_ARGS__)
         google::SetStderrLogging(google::NUM_SEVERITIES);
         //google::SetStderrLogging(google::GLOG_INFO);
         // 通过配置获取日志目录
-        std::string log_dir = Php::ini_get("pandalog.log_dir");
+        std::string log_dir = Php::ini_get("plog.log_dir");
         if(log_dir.length() > 0) {
             s_dir = log_dir;
         }

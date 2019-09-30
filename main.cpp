@@ -48,7 +48,7 @@ extern "C"
         extension.add(std::move(log_kit));
         extension.add(std::move(logger));
 
-        extension.add(Php::Ini("pandalog.log_dir", "/data/projlogs"));
+        extension.add(Php::Ini("plog.log_dir", "/data/projlogs"));
         
         // return the module entry
         return extension.module();
